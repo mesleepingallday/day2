@@ -4,10 +4,10 @@ let fontName = document.getElementById("fontName");
 let fontSizeRef = document.getElementById("fontSize");
 let writingArea = document.getElementById("text-input");
 let linkButton = document.getElementById("createLink");
-let alignButtons = document.getElementById(".align");
-let spacingButtons = document.getElementById(".spacing");
-let formatButtons = document.getElementById(".format");
-let scriptButtons = document.getElementById(".script");
+let alignButtons = document.querySelectorAll(".align");
+let spacingButtons = document.querySelectorAll(".spacing");
+let formatButtons = document.querySelectorAll(".format");
+let scriptButtons = document.querySelectorAll(".script");
 
 let fontList = [
   "Arial",
@@ -20,11 +20,9 @@ let fontList = [
 ];
 
 const intializer = () => {
-  highLighter(alignButtons, true);
-  highLighter(spacingButtons, true);
-  highLighter(formatButtons, false);
-  highLighter(scriptButtons, true);
+  
 
+  //Setup font
   fontList.map((value) => {
     let option = document.createElement("option");
     option.value = value;
@@ -32,6 +30,7 @@ const intializer = () => {
     fontName.appendChild(option);
   });
 
+  //Setup size
   for (let i = 1; i <= 7; i++) {
     let option = document.createElement("option");
     option.innerHTML = i;
@@ -40,9 +39,12 @@ const intializer = () => {
   }
 
   fontSizeRef.value = 3;
-};
 
-// intializer();
+  highlighter(alignButtons, true);
+  highlighter(spacingButtons, true);
+  highlighter(formatButtons, false);
+  highlighter(scriptButtons, true);
+};
 
 const modifyText = (command, defaultUi, value) => {
   document.execCommand(command, defaultUi, value);
@@ -71,15 +73,18 @@ linkButton.addEventListener("click", () => {
   }
 });
 
-const highLighter = (className, needsRemoval) => {
+const highlighter = (className, needsRemoval) => {
+  //Fix: className -> className? (without '?', null error)
   className.forEach((button) => {
     button.addEventListener("click", () => {
       if (needsRemoval) {
+        console.log("Done");
         let alreadyActive = false;
         if (button.classList.contains("active")) {
           alreadyActive = true;
         }
-        highLighterRemover(className);
+        //Clear cac buttons cung nhom, neu chung dang active. only 1 active
+        highlighterRemover(className);
         if (!alreadyActive) {
           button.classList.add("active");
         }
@@ -90,7 +95,7 @@ const highLighter = (className, needsRemoval) => {
   });
 };
 
-const highLighterRemover = (className) => {
+const highlighterRemover = (className) => {
   className.forEach((button) => {
     button.classList.remove("active");
   });
